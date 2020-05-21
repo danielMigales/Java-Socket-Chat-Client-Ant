@@ -5,18 +5,17 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +32,7 @@ import modelo.User;
  */
 public class StartController implements Initializable {
 
+    //variables para el movimiento del raton
     double xOffset = 0;
     double yOffset = 0;
 
@@ -94,10 +94,13 @@ public class StartController implements Initializable {
     private Label labelRegisterOK;
 
     @FXML
-    private MenuBar MenuBarMenuLogin;
+    private Tab tabAyuda;
 
     @FXML
-    private MenuItem TabMenuCerrar;
+    private TextArea textAreaHelpStart;
+
+    @FXML
+    private ChoiceBox<?> ChoiBoxHelpStart;
 
     @FXML
     private ImageView imageViewLogo;
@@ -121,17 +124,10 @@ public class StartController implements Initializable {
         assert imageviewIconUserRegister != null : "fx:id=\"imageviewIconUserRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconPasswordRegister != null : "fx:id=\"imageviewIconPasswordRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert labelRegisterOK != null : "fx:id=\"labelRegisterOK\" was not injected: check your FXML file 'Start.fxml'.";
-        assert MenuBarMenuLogin != null : "fx:id=\"MenuBarMenuLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert TabMenuCerrar != null : "fx:id=\"TabMenuCerrar\" was not injected: check your FXML file 'Start.fxml'.";
+        assert tabAyuda != null : "fx:id=\"tabAyuda\" was not injected: check your FXML file 'Start.fxml'.";
+        assert textAreaHelpStart != null : "fx:id=\"textAreaHelpStart\" was not injected: check your FXML file 'Start.fxml'.";
+        assert ChoiBoxHelpStart != null : "fx:id=\"ChoiBoxHelpStart\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageViewLogo != null : "fx:id=\"imageViewLogo\" was not injected: check your FXML file 'Start.fxml'.";
-    }
-
-    @FXML
-    void closeApp(ActionEvent event) {
-
-        //cierra la aplicacion desde el menu cerrar
-        Stage stage = (Stage) this.MenuBarMenuLogin.getScene().getWindow();
-        stage.close();
     }
 
     @Override
@@ -155,9 +151,6 @@ public class StartController implements Initializable {
                 && textFieldPasswordLogin.getText().equals(user.getPassword())) {
 
             //se cierra la ventana de login
-            Stage stage = (Stage) this.MenuBarMenuLogin.getScene().getWindow();
-            stage.close();
-
             //se llama a la siguiente ventana
             newStage();
 
@@ -195,15 +188,12 @@ public class StartController implements Initializable {
         secondStage.setScene(scene);
         secondStage.initStyle(StageStyle.UNIFIED); //aparece el boton minimizar y cerrar en el marco
         secondStage.setTitle("Java Socket Chat");
-        secondStage.show(); //mostrar la ventana
+        secondStage.show();
 
         //arrastrar con el raton la ventana
-        root.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event1) {
-                xOffset = event1.getSceneX();
-                yOffset = event1.getSceneY();
-            }
+        root.setOnMousePressed((MouseEvent event1) -> {
+            xOffset = event1.getSceneX();
+            yOffset = event1.getSceneY();
         });
         root.setOnMouseDragged((MouseEvent event1) -> {
             secondStage.setX(event1.getScreenX() - xOffset);

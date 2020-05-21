@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import modelo.DataPaquete;
+import modelo.Hash;
+import static modelo.Hash.hash;
 import modelo.User;
 
 /**
@@ -63,16 +66,21 @@ public class ChatController implements Initializable {
 
     @FXML
     void initialize() {
-        assert chatStage != null : "fx:id=\"chatStage\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
-        assert buttonSendChat != null : "fx:id=\"buttonSendChat\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
-        assert textAreaWatchMessages != null : "fx:id=\"textAreaWatchMessages\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
-        assert textFieldChatUsername != null : "fx:id=\"textFieldChatUsername\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
-        assert textFieldChatIPAddress != null : "fx:id=\"textFieldChatIPAddress\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
-        assert textFieldWriteArea != null : "fx:id=\"textFieldWriteArea\" was not injected: check your FXML file 'U.I.Chat.fxml'.";
+        assert chatStage != null : "fx:id=\"chatStage\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert buttonSendChat != null : "fx:id=\"buttonSendChat\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textAreaWatchMessages != null : "fx:id=\"textAreaWatchMessages\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textFieldChatUsername != null : "fx:id=\"textFieldChatUsername\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textFieldChatIPAddress != null : "fx:id=\"textFieldChatIPAddress\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textFieldWriteArea != null : "fx:id=\"textFieldWriteArea\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textAreaHostNameChat != null : "fx:id=\"textAreaHostNameChat\" was not injected: check your FXML file 'Chat.fxml'.";
+
     }
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -90,28 +98,25 @@ public class ChatController implements Initializable {
         var nombreUsuario = textFieldChatUsername.getText();
         var direccionIP = textFieldChatIPAddress.getText();
         var mensaje = textFieldWriteArea.getText();
+        
+         byte[] passwordByte = hash(mensaje);
+         final String passwordHash = Hash.byteToHex(passwordByte);
+         System.out.println(passwordHash);
 
-        var dataSalida = new DataPaquete(nombreUsuario, direccionIP, mensaje);
+        var dataSalida = new DataPaquete(nombreUsuario, direccionIP, passwordHash);
         System.out.println(mensaje);
 
         try {
 
-            //crear el socket (conector con el servidor)
-            Socket socket = new Socket(IP_SERVIDOR, PUERTO_SERVIDOR);
-
             //flujo de informacion y se asocial al socket
-            var flujoSalida = new ObjectOutputStream(socket.getOutputStream());
+            try ( //crear el socket (conector con el servidor)
+                    Socket socket = new Socket(IP_SERVIDOR, PUERTO_SERVIDOR); //flujo de informacion y se asocial al socket
+            java.io.ObjectOutputStream flujoSalida = new ObjectOutputStream(socket.getOutputStream())) {
+                //enviar al dato
+                flujoSalida.writeObject(dataSalida);
+            }
 
-            //enviar al dato
-            flujoSalida.writeObject(dataSalida);
-
-            //cerrar el flujo de salida
-            flujoSalida.close();
-
-            //cerrar el socket
-            socket.close();
-
-            textAreaWatchMessages.appendText("hola");
+            textAreaWatchMessages.appendText(mensaje + "\n");
             textFieldWriteArea.clear();
 
         } catch (IOException ex) {
@@ -164,7 +169,7 @@ public class ChatController implements Initializable {
                         var mensaje = dataEntrada.getMensaje();
 
                         //visualizar los datos en la interfaz
-                        var mensajeConcatenado = "de " + nombreUsuario + " para " + direccionIP + ": \n" + mensaje + "\n";
+                        var mensajeConcatenado = nombreUsuario + "/" + direccionIP + " dice:\t" + mensaje + "\n";
                         System.out.println(mensajeConcatenado);
                         textAreaWatchMessages.appendText(mensajeConcatenado);
                     }

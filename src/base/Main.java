@@ -25,7 +25,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/vista/Start.fxml"));
         primaryStage.setTitle("Inicio de sesion / Registro");
         primaryStage.setScene(new Scene(root));
-        primaryStage.initStyle(StageStyle.UNDECORATED); //ocultar el marco
+        primaryStage.initStyle(StageStyle.UNIFIED); //ocultar el marco
         primaryStage.show(); //mostrar la ventana
         primaryStage.setAlwaysOnTop(true); //siempre encima
         primaryStage.setResizable(false); //no modificable de tamaño
