@@ -22,13 +22,13 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="344.0" prefWidth="416.0">
                      <children>
-                        <Button fx:id="buttonLogin" layoutX="10.0" layoutY="250.0" mnemonicParsing="false" onAction="#login" prefHeight="60.0" prefWidth="400.0" style="-fx-background-color: #5564eb;" text="LOGIN" textFill="#fffdfd">
+                        <Button fx:id="buttonLogin" layoutX="8.0" layoutY="263.0" mnemonicParsing="false" onAction="#login" prefHeight="60.0" prefWidth="400.0" style="-fx-background-color: #5564eb;" text="LOGIN" textFill="#fffdfd">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Button>
-                        <TextField fx:id="textAreaUsernameLogin" layoutX="74.0" layoutY="88.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su nombre de usuario" />
-                        <PasswordField fx:id="textFieldPasswordLogin" layoutX="75.0" layoutY="151.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su contraseña" />
+                        <TextField fx:id="textAreaUsernameLogin" layoutX="74.0" layoutY="88.0" prefHeight="40.0" prefWidth="300.0" promptText="Introduzca su nombre de usuario" />
+                        <PasswordField fx:id="textFieldPasswordLogin" layoutX="75.0" layoutY="151.0" prefHeight="40.0" prefWidth="300.0" promptText="Introduzca su contraseña" />
                         <Label layoutX="130.0" layoutY="31.0" prefHeight="26.0" prefWidth="155.0" text="Iniciar Sesion">
                            <font>
                               <Font size="20.0" />
@@ -44,6 +44,7 @@
                               <Image url="@../resources/images/passwordIcon.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="labelLoginOk" layoutX="98.0" layoutY="214.0" prefHeight="16.0" prefWidth="227.0" textFill="#e81f1f" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -51,34 +52,35 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="479.0" prefWidth="556.0">
                      <children>
-                        <Button id="buttonRegister" fx:id="buttonRegister" layoutX="10.0" layoutY="255.0" mnemonicParsing="false" onAction="#register" prefHeight="60.0" prefWidth="400.0" style="-fx-background-color: #5564eb;" text="REGISTRARSE" textFill="#fffefe">
+                        <Button id="buttonRegister" fx:id="buttonRegister" layoutX="9.0" layoutY="271.0" mnemonicParsing="false" onAction="#register" prefHeight="60.0" prefWidth="400.0" style="-fx-background-color: #5564eb;" text="REGISTRARSE" textFill="#fffefe">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Button>
-                        <Label layoutX="111.0" layoutY="33.0" text="Registro de usuario">
+                        <Label layoutX="111.0" layoutY="23.0" text="Registro de usuario">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textAreaEmailRegister" layoutX="67.0" layoutY="80.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su direccion de correo" />
-                        <TextField fx:id="textAreaUsernameRegister" layoutX="67.0" layoutY="133.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su nombre de usuario" />
-                        <PasswordField fx:id="textAreaPasswordRegister" layoutX="67.0" layoutY="191.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su contraseña" />
-                        <ImageView fx:id="imageviewIconEmailRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
+                        <TextField fx:id="textAreaEmailRegister" layoutX="67.0" layoutY="70.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su direccion de correo" />
+                        <TextField fx:id="textAreaUsernameRegister" layoutX="67.0" layoutY="123.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su nombre de usuario" />
+                        <PasswordField fx:id="textAreaPasswordRegister" layoutX="67.0" layoutY="181.0" prefHeight="40.0" prefWidth="335.0" promptText="Introduzca su contraseña" />
+                        <ImageView fx:id="imageviewIconEmailRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/images/email.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="imageviewIconUserRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="133.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imageviewIconUserRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/images/userIcon.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="imageviewIconPasswordRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imageviewIconPasswordRegister" fitHeight="40.0" fitWidth="45.0" layoutX="10.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/images/passwordIcon.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="labelRegisterOK" layoutX="137.0" layoutY="235.0" prefHeight="16.0" prefWidth="144.0" textFill="#ee0909" wrapText="true" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -98,14 +100,14 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Label layoutX="171.0" layoutY="72.0" prefHeight="99.0" prefWidth="253.0" text="Java SocketChat" textFill="#1239b9" wrapText="true">
+      <Label layoutX="234.0" layoutY="64.0" prefHeight="100.0" prefWidth="174.0" text="Socket Chat" textAlignment="CENTER" textFill="#1239b9" textOverrun="CENTER_ELLIPSIS" wrapText="true">
          <font>
             <Font name="FreeMono Bold Oblique" size="40.0" />
          </font>
       </Label>
-      <ImageView fx:id="imageViewLogo" fitHeight="107.0" fitWidth="148.0" layoutX="33.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imageViewLogo" fitHeight="100.0" fitWidth="160.0" layoutX="68.0" layoutY="64.0" pickOnBounds="true">
          <image>
-            <Image url="@../resources/images/mensaje.png" />
+            <Image url="@../resources/images/sockets-img.png" />
          </image>
       </ImageView>
    </children>

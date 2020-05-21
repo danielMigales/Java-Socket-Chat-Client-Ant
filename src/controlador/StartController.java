@@ -10,9 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -23,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.ConexionBD;
+import modelo.User;
 
 /**
  * FXML Controller class
@@ -63,6 +64,9 @@ public class StartController implements Initializable {
     private ImageView imageviewIconPasswordLogin;
 
     @FXML
+    private Label labelLoginOk;
+
+    @FXML
     private Tab tabRegister;
 
     @FXML
@@ -87,6 +91,9 @@ public class StartController implements Initializable {
     private ImageView imageviewIconPasswordRegister;
 
     @FXML
+    private Label labelRegisterOK;
+
+    @FXML
     private MenuBar MenuBarMenuLogin;
 
     @FXML
@@ -104,6 +111,7 @@ public class StartController implements Initializable {
         assert textFieldPasswordLogin != null : "fx:id=\"textFieldPasswordLogin\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconUserLogin != null : "fx:id=\"imageviewIconUserLogin\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconPasswordLogin != null : "fx:id=\"imageviewIconPasswordLogin\" was not injected: check your FXML file 'Start.fxml'.";
+        assert labelLoginOk != null : "fx:id=\"labelLoginOk\" was not injected: check your FXML file 'Start.fxml'.";
         assert tabRegister != null : "fx:id=\"tabRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert buttonRegister != null : "fx:id=\"buttonRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert textAreaEmailRegister != null : "fx:id=\"textAreaEmailRegister\" was not injected: check your FXML file 'Start.fxml'.";
@@ -112,60 +120,49 @@ public class StartController implements Initializable {
         assert imageviewIconEmailRegister != null : "fx:id=\"imageviewIconEmailRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconUserRegister != null : "fx:id=\"imageviewIconUserRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconPasswordRegister != null : "fx:id=\"imageviewIconPasswordRegister\" was not injected: check your FXML file 'Start.fxml'.";
+        assert labelRegisterOK != null : "fx:id=\"labelRegisterOK\" was not injected: check your FXML file 'Start.fxml'.";
         assert MenuBarMenuLogin != null : "fx:id=\"MenuBarMenuLogin\" was not injected: check your FXML file 'Start.fxml'.";
         assert TabMenuCerrar != null : "fx:id=\"TabMenuCerrar\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageViewLogo != null : "fx:id=\"imageViewLogo\" was not injected: check your FXML file 'Start.fxml'.";
-
     }
 
     @FXML
-    void cerrarAplicacion(ActionEvent event) {
+    void closeApp(ActionEvent event) {
 
         //cierra la aplicacion desde el menu cerrar
         Stage stage = (Stage) this.MenuBarMenuLogin.getScene().getWindow();
         stage.close();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
     @FXML
     void login(ActionEvent event) throws IOException {
 
-        if (textAreaUsernameLogin.getText().equals("Daniel") && textFieldPasswordLogin.getText().equals("password")) {
+        //obtencion de los textos
+        String username = textAreaUsernameLogin.getText();
+        String password = textFieldPasswordLogin.getText();
+
+        //llamada a la bd para la comprobacion de los datos
+        ConexionBD conexionBD = new ConexionBD();
+        User user = conexionBD.login(username, password);
+
+        //validadcion del login
+        if (textAreaUsernameLogin.getText().equals(user.getUsername())
+                && textFieldPasswordLogin.getText().equals(user.getPassword())) {
 
             //se cierra la ventana de login
             Stage stage = (Stage) this.MenuBarMenuLogin.getScene().getWindow();
             stage.close();
 
-            //se inicia la ventana de chat
-            Stage secondStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/vista/Chat.fxml"));
-            Scene scene = new Scene(root);
-            secondStage.setScene(scene);
-            secondStage.initStyle(StageStyle.UNDECORATED); //ocultar el marco
-            secondStage.show(); //mostrar la ventana
-            secondStage.setAlwaysOnTop(true); //siempre encima
-            secondStage.setResizable(false); //no modificable de tamaño
-            secondStage.show();
-
-            root.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event1) {
-                    xOffset = event1.getSceneX();
-                    yOffset = event1.getSceneY();
-                }
-            });
-            root.setOnMouseDragged((MouseEvent event1) -> {
-                secondStage.setX(event1.getScreenX() - xOffset);
-                secondStage.setY(event1.getScreenY() - yOffset);
-            });
+            //se llama a la siguiente ventana
+            newStage();
 
         } else {
-
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setHeaderText("Look, an Error Dialog");
-            alert.setContentText("Ooops, there was an error!");
-            alert.showAndWait();
-
+            labelLoginOk.setText("Sus credenciales no son correctas");
         }
 
     }
@@ -173,12 +170,45 @@ public class StartController implements Initializable {
     @FXML
     void register(ActionEvent event) {
 
-        System.out.println("gracias por registrarte");
+        String email = textAreaEmailRegister.getText();
+        String username = textAreaUsernameRegister.getText();
+        String password = textAreaPasswordRegister.getText();
+
+        ConexionBD conexionBD = new ConexionBD();
+        conexionBD.register(email, username, password);
+
+        System.out.println(email + username + password);
+
+        textAreaEmailRegister.clear();
+        textAreaUsernameRegister.clear();
+        textAreaPasswordRegister.clear();
+        labelRegisterOK.setText("Registro completo");
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void newStage() throws IOException {
+
+        //se inicia la ventana de chat
+        Stage secondStage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/vista/Chat.fxml"));
+        Scene scene = new Scene(root);
+        secondStage.setScene(scene);
+        secondStage.initStyle(StageStyle.UNIFIED); //aparece el boton minimizar y cerrar en el marco
+        secondStage.setTitle("Java Socket Chat");
+        secondStage.show(); //mostrar la ventana
+
+        //arrastrar con el raton la ventana
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event1) {
+                xOffset = event1.getSceneX();
+                yOffset = event1.getSceneY();
+            }
+        });
+        root.setOnMouseDragged((MouseEvent event1) -> {
+            secondStage.setX(event1.getScreenX() - xOffset);
+            secondStage.setY(event1.getScreenY() - yOffset);
+        });
 
     }
 }

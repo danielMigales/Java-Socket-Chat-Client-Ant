@@ -29,6 +29,7 @@ public class Main extends Application {
         primaryStage.show(); //mostrar la ventana
         primaryStage.setAlwaysOnTop(true); //siempre encima
         primaryStage.setResizable(false); //no modificable de tamaño
+        
 
         //esto sirve para que la ventana pueda ser arrastrada por la pantalla con el raton, ya que sin marco se queda clavada
         root.setOnMousePressed((MouseEvent event) -> {
