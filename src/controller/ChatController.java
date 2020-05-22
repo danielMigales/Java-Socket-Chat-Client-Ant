@@ -119,16 +119,16 @@ public class ChatController implements Initializable {
 
         //encriptar mensaje
         Cryptography encryption = new Cryptography();
-        String criptoMessage = "";
+        String cryptoMessage = "";
         try {
-            criptoMessage = encryption.encrypt(message);
+            cryptoMessage = encryption.encrypt(message);
         } catch (Exception ex) {
             Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("El mensaje ha sido encriptado antes del envio: " + criptoMessage);
+        System.out.println("El mensaje ha sido encriptado antes del envio: " + cryptoMessage);
 
         //se envia encriptado
-        DataPaquete outputData = new DataPaquete(userName, IPAddress, criptoMessage);
+        DataPaquete outputData = new DataPaquete(userName, IPAddress, cryptoMessage);
         //System.out.println(mensaje);
 
         try {
