@@ -8,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +34,8 @@ public class ChatController implements Initializable {
     private final String IP_SERVIDOR = "192.168.1.49";
     private final int PUERTO_SERVIDOR = 40000;
     private final int PUERTO_CLIENTE = 50000;
+    
+    StartController controller2;
 
     //variables de Scenebuilder
     @FXML
@@ -44,7 +45,7 @@ public class ChatController implements Initializable {
     private URL location;
 
     @FXML
-    private AnchorPane chatStage;
+    private AnchorPane AnchorPane;
 
     @FXML
     private Button buttonSendChat;
@@ -65,14 +66,18 @@ public class ChatController implements Initializable {
     private TextField textAreaHostNameChat;
 
     @FXML
+    private Button buttonLogOutChat;
+
+    @FXML
     void initialize() {
-        assert chatStage != null : "fx:id=\"chatStage\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert AnchorPane != null : "fx:id=\"AnchorPane\" was not injected: check your FXML file 'Chat.fxml'.";
         assert buttonSendChat != null : "fx:id=\"buttonSendChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textAreaWatchMessages != null : "fx:id=\"textAreaWatchMessages\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldChatUsername != null : "fx:id=\"textFieldChatUsername\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldChatIPAddress != null : "fx:id=\"textFieldChatIPAddress\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldWriteArea != null : "fx:id=\"textFieldWriteArea\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textAreaHostNameChat != null : "fx:id=\"textAreaHostNameChat\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert buttonLogOutChat != null : "fx:id=\"buttonLogOutChat\" was not injected: check your FXML file 'Chat.fxml'.";
 
     }
 
@@ -91,6 +96,13 @@ public class ChatController implements Initializable {
 
     }
 
+    public void getParams(StartController controller, String username) {
+
+        textFieldChatUsername.setText(username);
+        controller2 = controller;
+
+    }
+
     @FXML
     void sendMessage(ActionEvent event) {
 
@@ -98,25 +110,29 @@ public class ChatController implements Initializable {
         var nombreUsuario = textFieldChatUsername.getText();
         var direccionIP = textFieldChatIPAddress.getText();
         var mensaje = textFieldWriteArea.getText();
-        
-         byte[] passwordByte = hash(mensaje);
-         final String passwordHash = Hash.byteToHex(passwordByte);
-         System.out.println(passwordHash);
 
-        var dataSalida = new DataPaquete(nombreUsuario, direccionIP, passwordHash);
-        System.out.println(mensaje);
+        //encriptarlo con hash
+        byte[] messageByte = hash(mensaje);
+        final String messageHash = Hash.byteToHex(messageByte);
+        System.out.println("El mensaje ha sido encriptado antes del envio: " + messageHash);
+
+        //se envia encriptado
+        var dataSalida = new DataPaquete(nombreUsuario, direccionIP, messageHash);
+        //System.out.println(mensaje);
 
         try {
 
-            //flujo de informacion y se asocial al socket
+            //flujo de informacion y se asocia al socket
             try ( //crear el socket (conector con el servidor)
-                    Socket socket = new Socket(IP_SERVIDOR, PUERTO_SERVIDOR); //flujo de informacion y se asocial al socket
-            java.io.ObjectOutputStream flujoSalida = new ObjectOutputStream(socket.getOutputStream())) {
+                    Socket socket = new Socket(IP_SERVIDOR, PUERTO_SERVIDOR); //flujo de informacion y se asocia al socket
+                    java.io.ObjectOutputStream flujoSalida = new ObjectOutputStream(socket.getOutputStream())) {
                 //enviar al dato
                 flujoSalida.writeObject(dataSalida);
             }
 
+            //el mensaje sin encriptar se muestra en el area de chat
             textAreaWatchMessages.appendText(mensaje + "\n");
+            //se limpia el area de envio de mensajes
             textFieldWriteArea.clear();
 
         } catch (IOException ex) {
@@ -128,14 +144,15 @@ public class ChatController implements Initializable {
 
     public void getUserIP() {
 
-        //obtener la ip y el nombre de host y colocarlo en el lugar para ello
+        //obtener los datos para colocarlos en el las casillas del chat (datos usuario)
         try {
             User user;
             //obtener el nombre de usuario
+
+            //obtener direccion IP y el nombre de host y colocarlos
             InetAddress address = InetAddress.getLocalHost();
             String hostName = address.getHostName();
             textAreaHostNameChat.setText(hostName);
-
             String localIpAddress = address.getHostAddress();
             textFieldChatIPAddress.setText(localIpAddress);
 
@@ -185,6 +202,11 @@ public class ChatController implements Initializable {
         };
         //iniciar el hilo
         t.start();
+    }
+
+    @FXML
+    void logOut(ActionEvent event) {
+
     }
 
 }

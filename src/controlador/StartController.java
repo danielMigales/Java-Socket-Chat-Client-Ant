@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import modelo.ConexionBD;
@@ -35,6 +37,8 @@ public class StartController implements Initializable {
     //variables para el movimiento del raton
     double xOffset = 0;
     double yOffset = 0;
+
+    StartController controller;
 
     @FXML
     private ResourceBundle resources;
@@ -133,6 +137,7 @@ public class StartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        controller = this;
     }
 
     @FXML
@@ -151,8 +156,9 @@ public class StartController implements Initializable {
                 && textFieldPasswordLogin.getText().equals(user.getPassword())) {
 
             //se cierra la ventana de login
+            closeStage(event);
             //se llama a la siguiente ventana
-            newStage();
+            newStage(username);
 
         } else {
             labelLoginOk.setText("Sus credenciales no son correctas");
@@ -179,15 +185,22 @@ public class StartController implements Initializable {
 
     }
 
-    public void newStage() throws IOException {
+    public void newStage(String username) throws IOException {
 
         //se inicia la ventana de chat
         Stage secondStage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/vista/Chat.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("/vista/Chat.fxml").openStream());  
+        root.getStylesheets().add(getClass().getResource("/css/chatStyleCss.css").toString());
+        ChatController instancia = loader.getController();
+        instancia.getParams(controller, username);
         Scene scene = new Scene(root);
         secondStage.setScene(scene);
-        secondStage.initStyle(StageStyle.UNIFIED); //aparece el boton minimizar y cerrar en el marco
+        secondStage.initStyle(StageStyle.UTILITY); //aparece el boton minimizar y cerrar en el marco
         secondStage.setTitle("Java Socket Chat");
+        secondStage.setAlwaysOnTop(true); //siempre encima
+        secondStage.setResizable(false); //no modificable de tamaño
+        secondStage.initModality(Modality.APPLICATION_MODAL);
         secondStage.show();
 
         //arrastrar con el raton la ventana
@@ -200,5 +213,12 @@ public class StartController implements Initializable {
             secondStage.setY(event1.getScreenY() - yOffset);
         });
 
+    }
+
+    private void closeStage(ActionEvent event) {
+
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 }

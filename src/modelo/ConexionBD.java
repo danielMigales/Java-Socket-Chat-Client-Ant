@@ -34,8 +34,10 @@ public class ConexionBD {
             Class.forName(DRIVER);
             conection = (Connection) DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ConexionBD.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("**********************************************************************");
+            System.out.println("RECUERDE ACTIVAR SU SERVIDOR XAMPP Y CREAR LA BASE DE DATOS chat_users");
+            System.out.println("**********************************************************************");
         }
     }
 
@@ -62,7 +64,8 @@ public class ConexionBD {
 
         try {
             ps = (PreparedStatement) conection.prepareStatement("CREATE TABLE IF NOT EXISTS " + TABLE1
-                    + "(userId int NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(100), username VARCHAR (50), password VARCHAR (50))");
+                    + "(userId int NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(100), "
+                    + "username VARCHAR (50), password VARCHAR (50))");
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,11 +74,13 @@ public class ConexionBD {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("******************************************");
         System.out.println("Tabla " + TABLE1 + " creada o actualizada.");
+        System.out.println("******************************************");
 
         String sql = "INSERT INTO " + TABLE1 + "(email, username, password) " + "values ('" + email + "', '" + username
                 + "', '" + password + "')";
-        System.out.println(sql);
+        //System.out.println(sql);
 
         try (Statement st = conection.createStatement()) {
             st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
@@ -95,12 +100,15 @@ public class ConexionBD {
         Statement st = null;
         String sql = "SELECT * FROM " + TABLE1 + " WHERE username = " + "'" + username + "'"
                 + " AND password = " + "'" + password + "';";
-        System.out.println(sql);
+        //System.out.println(sql);
 
         try {
             conection = (Connection) DriverManager.getConnection(URL + BD, USER, PASSWORD);
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("********************************************************");
+            System.out.println("RECUERDE QUE HA DE ESTAR REGISTRADO PARA PODER LOGUEARSE");
+            System.out.println("********************************************************");
         }
 
         try {
@@ -117,7 +125,9 @@ public class ConexionBD {
                     resultados++;
                 }
                 if (resultados == 0) {
-                    System.out.println("No se ha encontrado ningun resultado.");
+                    System.out.println("*******************************************************************");
+                    System.out.println("No se ha encontrado ningun resultado.USTED NO DEBE ESTAR REGISTRADO");
+                    System.out.println("*******************************************************************");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
