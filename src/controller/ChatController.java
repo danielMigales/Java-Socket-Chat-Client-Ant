@@ -1,4 +1,4 @@
-package controlador;
+package controller;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,23 +18,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import modelo.DataPaquete;
-import modelo.Hash;
-import static modelo.Hash.hash;
-import modelo.User;
+import dataPaquete.DataPaquete;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import model.Cryptography;
+import model.User;
 
 /**
  * FXML Controller class
  *
- * @author daniel
+ * @author daniel migales puertas
+ *
  */
 public class ChatController implements Initializable {
 
-    //variables 
-    private final String IP_SERVIDOR = "192.168.1.49";
-    private final int PUERTO_SERVIDOR = 40000;
-    private final int PUERTO_CLIENTE = 50000;
-    
+    //variables para la conexion
+    private final String SERVER_IP = "192.168.1.49"; //cambiar esta variable segun la ip del servidor
+    private final int SERVER_PORT = 40000;
+    private final int CLIENT_PORT = 50000;
+
+    //instancia del controlador de la primera pantalla (para obtener el username desde alli)
     StartController controller2;
 
     //variables de Scenebuilder
@@ -45,7 +51,7 @@ public class ChatController implements Initializable {
     private URL location;
 
     @FXML
-    private AnchorPane AnchorPane;
+    private AnchorPane AnchorPaneChat;
 
     @FXML
     private Button buttonSendChat;
@@ -70,7 +76,7 @@ public class ChatController implements Initializable {
 
     @FXML
     void initialize() {
-        assert AnchorPane != null : "fx:id=\"AnchorPane\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert AnchorPaneChat != null : "fx:id=\"AnchorPaneChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert buttonSendChat != null : "fx:id=\"buttonSendChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textAreaWatchMessages != null : "fx:id=\"textAreaWatchMessages\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldChatUsername != null : "fx:id=\"textFieldChatUsername\" was not injected: check your FXML file 'Chat.fxml'.";
@@ -92,7 +98,7 @@ public class ChatController implements Initializable {
 
         //Al iniciar la escena se realiza lo siguiente:
         getUserIP();
-        hiloSocket();
+        socketThread();
 
     }
 
@@ -107,37 +113,42 @@ public class ChatController implements Initializable {
     void sendMessage(ActionEvent event) {
 
         //obtener el mensaje del los campos de texto de la interfaz
-        var nombreUsuario = textFieldChatUsername.getText();
-        var direccionIP = textFieldChatIPAddress.getText();
-        var mensaje = textFieldWriteArea.getText();
+        var userName = textFieldChatUsername.getText();
+        var IPAddress = textFieldChatIPAddress.getText();
+        var message = textFieldWriteArea.getText();
 
-        //encriptarlo con hash
-        byte[] messageByte = hash(mensaje);
-        final String messageHash = Hash.byteToHex(messageByte);
-        System.out.println("El mensaje ha sido encriptado antes del envio: " + messageHash);
+        //encriptar mensaje
+        Cryptography encryption = new Cryptography();
+        String criptoMessage = "";
+        try {
+            criptoMessage = encryption.encrypt(message);
+        } catch (Exception ex) {
+            Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("El mensaje ha sido encriptado antes del envio: " + criptoMessage);
 
         //se envia encriptado
-        var dataSalida = new DataPaquete(nombreUsuario, direccionIP, messageHash);
+        DataPaquete outputData = new DataPaquete(userName, IPAddress, criptoMessage);
         //System.out.println(mensaje);
 
         try {
 
             //flujo de informacion y se asocia al socket
             try ( //crear el socket (conector con el servidor)
-                    Socket socket = new Socket(IP_SERVIDOR, PUERTO_SERVIDOR); //flujo de informacion y se asocia al socket
-                    java.io.ObjectOutputStream flujoSalida = new ObjectOutputStream(socket.getOutputStream())) {
+                    Socket socket = new Socket(SERVER_IP, SERVER_PORT); //flujo de informacion y se asocia al socket
+                    java.io.ObjectOutputStream outFlow = new ObjectOutputStream(socket.getOutputStream())) {
                 //enviar al dato
-                flujoSalida.writeObject(dataSalida);
+                outFlow.writeObject(outputData);
             }
 
             //el mensaje sin encriptar se muestra en el area de chat
-            textAreaWatchMessages.appendText(mensaje + "\n");
+            textAreaWatchMessages.appendText(message + "\n");
             //se limpia el area de envio de mensajes
             textFieldWriteArea.clear();
 
         } catch (IOException ex) {
             Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("No se pudo crear el socket para conectar con el servidor en la direccion " + IP_SERVIDOR);
+            System.out.println("No se pudo crear el socket para conectar con el servidor en la direccion " + SERVER_IP);
         }
 
     }
@@ -162,38 +173,41 @@ public class ChatController implements Initializable {
 
     }
 
-    public void hiloSocket() {
+    public void socketThread() {
 
         //lanzar el hilo del socket
-        var t = new Thread() {
+        var thread = new Thread() {
             @Override
             public void run() {
 
                 try {
-                    var serverCliente = new ServerSocket(PUERTO_CLIENTE);
+                    DataPaquete inputData;
+                    var serverClient = new ServerSocket(CLIENT_PORT);
+                    Socket socket;
 
                     while (true) {
-                        Socket socket = serverCliente.accept();
+                        socket = serverClient.accept();
 
                         //crear el flujo de entrada asociado al socket
-                        var flujoEntrada = new ObjectInputStream(socket.getInputStream());
+                        var inputFlow = new ObjectInputStream(socket.getInputStream());
 
                         //extraer el mensaje
-                        DataPaquete dataEntrada = (DataPaquete) flujoEntrada.readObject();
+                        inputData = (DataPaquete) inputFlow.readObject();
 
-                        var nombreUsuario = dataEntrada.getNombreUsuario();
-                        var direccionIP = dataEntrada.getDireccionIP();
-                        var mensaje = dataEntrada.getMensaje();
+                        var userName = inputData.getNombreUsuario();
+                        var ipAddress = inputData.getDireccionIP();
+                        var message = inputData.getMensaje();
+                        var concatenatedMessage = userName + "/" + ipAddress + " dice:\t" + message + "\n";
+                        System.out.println(concatenatedMessage);
 
                         //visualizar los datos en la interfaz
-                        var mensajeConcatenado = nombreUsuario + "/" + direccionIP + " dice:\t" + mensaje + "\n";
-                        System.out.println(mensajeConcatenado);
-                        textAreaWatchMessages.appendText(mensajeConcatenado);
+                        Platform.runLater(() -> {
+                            textAreaWatchMessages.appendText(concatenatedMessage);
+                        });
                     }
-
                 } catch (IOException | ClassNotFoundException ex) {
 
-                    System.out.println("No se ha podido crear el servidor de escucha en el puerto " + PUERTO_CLIENTE
+                    System.out.println("No se ha podido crear el servidor de escucha en el puerto " + CLIENT_PORT
                             + " en la aplicacion cliente");
                     System.out.println("No se ha encontrado la clase DataPaquete");
                     System.out.println(ex.getMessage());
@@ -201,11 +215,21 @@ public class ChatController implements Initializable {
             }
         };
         //iniciar el hilo
-        t.start();
+        thread.start();
     }
 
     @FXML
-    void logOut(ActionEvent event) {
+    void logOut(ActionEvent event) throws IOException {
+
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+
+        stage = new Stage();
+        AnchorPane root = FXMLLoader.load(getClass().getResource("/view/Start.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
     }
 

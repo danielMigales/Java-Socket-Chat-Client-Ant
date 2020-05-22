@@ -22,10 +22,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getResource("/vista/Start.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/Start.fxml"));
         primaryStage.setTitle("Inicio de sesion / Registro");
         primaryStage.setScene(new Scene(root));
-        primaryStage.initStyle(StageStyle.UNIFIED); //ocultar el marco
+        primaryStage.initStyle(StageStyle.UNIFIED); //solo el boton de cerrar en el marco
         primaryStage.show(); //mostrar la ventana
         primaryStage.setAlwaysOnTop(true); //siempre encima
         primaryStage.setResizable(false); //no modificable de tamaño

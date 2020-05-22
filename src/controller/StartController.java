@@ -1,4 +1,4 @@
-package controlador;
+package controller;
 
 import java.io.IOException;
 import javafx.fxml.Initializable;
@@ -23,8 +23,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import modelo.ConexionBD;
-import modelo.User;
+import model.DataBaseConnection;
+import model.User;
 
 /**
  * FXML Controller class
@@ -148,8 +148,8 @@ public class StartController implements Initializable {
         String password = textFieldPasswordLogin.getText();
 
         //llamada a la bd para la comprobacion de los datos
-        ConexionBD conexionBD = new ConexionBD();
-        User user = conexionBD.login(username, password);
+        DataBaseConnection connectionBD = new DataBaseConnection();
+        User user = connectionBD.login(username, password);
 
         //validadcion del login
         if (textAreaUsernameLogin.getText().equals(user.getUsername())
@@ -169,33 +169,41 @@ public class StartController implements Initializable {
     @FXML
     void register(ActionEvent event) {
 
+        //obtener los datos de los textarea 
         String email = textAreaEmailRegister.getText();
         String username = textAreaUsernameRegister.getText();
         String password = textAreaPasswordRegister.getText();
 
-        ConexionBD conexionBD = new ConexionBD();
-        conexionBD.register(email, username, password);
+        //conectar a la Bd para insertar los datos
+        DataBaseConnection connectionBD = new DataBaseConnection();
+        connectionBD.register(email, username, password);
+        //System.out.println(email + "," + username + "," + password);
 
-        System.out.println(email + username + password);
-
+        //limpiar las casillas tras pulsar el boton para dar el efecto de que se ha enviado
         textAreaEmailRegister.clear();
         textAreaUsernameRegister.clear();
         textAreaPasswordRegister.clear();
+        //etiqueta de confirmacion
         labelRegisterOK.setText("Registro completo");
 
     }
 
     public void newStage(String username) throws IOException {
 
-        //se inicia la ventana de chat
+        //se inicia la ventana de chat instanciando la clase Stage y FXMLLoader
         Stage secondStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("/vista/Chat.fxml").openStream());  
-        root.getStylesheets().add(getClass().getResource("/css/chatStyleCss.css").toString());
+        //se le indica la ruta del fxml
+        Parent root = loader.load(getClass().getResource("/view/Chat.fxml").openStream());
+        //ruta del css
+        root.getStylesheets().add(getClass().getResource("/css/chatStyleCss.css").toExternalForm());
+        //se instancia el controlador para poder pasar un parametro a la siguiente ventana
         ChatController instancia = loader.getController();
         instancia.getParams(controller, username);
+        //se instancia nueva Scene
         Scene scene = new Scene(root);
         secondStage.setScene(scene);
+        //se añaden los parametros de aspecto a la nueva ventana
         secondStage.initStyle(StageStyle.UTILITY); //aparece el boton minimizar y cerrar en el marco
         secondStage.setTitle("Java Socket Chat");
         secondStage.setAlwaysOnTop(true); //siempre encima

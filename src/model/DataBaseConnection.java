@@ -1,4 +1,4 @@
-package modelo;
+package model;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -14,10 +14,10 @@ import java.util.logging.Logger;
  * @author daniel migales puertas
  *
  */
-public class ConexionBD {
+public class DataBaseConnection {
 
     //datos de la base de datos 
-    private static Connection conection;
+    private static Connection connection;
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -27,14 +27,14 @@ public class ConexionBD {
 
     //ENCENDER XAMPP Y CREAR LA BASE DE DATOS chat_users PARA PROCEDER CON EL REGISTRO Y LOGIN
     //constructor de la conexion
-    public ConexionBD() {
+    public DataBaseConnection() {
 
-        conection = null;
+        connection = null;
         try {
             Class.forName(DRIVER);
-            conection = (Connection) DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = (Connection) DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("**********************************************************************");
             System.out.println("RECUERDE ACTIVAR SU SERVIDOR XAMPP Y CREAR LA BASE DE DATOS chat_users");
             System.out.println("**********************************************************************");
@@ -42,8 +42,8 @@ public class ConexionBD {
     }
 
     //funcion de desconectar de la bd
-    public void desconectar() {
-        conection = null;
+    public void disconnect() {
+        connection = null;
     }
 
     //registro de usuarios
@@ -52,27 +52,27 @@ public class ConexionBD {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            conection = (Connection) DriverManager.getConnection(URL + BD, USER, PASSWORD);
+            connection = (Connection) DriverManager.getConnection(URL + BD, USER, PASSWORD);
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         PreparedStatement ps = null;
 
         try {
-            ps = (PreparedStatement) conection.prepareStatement("CREATE TABLE IF NOT EXISTS " + TABLE1
+            ps = (PreparedStatement) connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + TABLE1
                     + "(userId int NOT NULL AUTO_INCREMENT PRIMARY KEY, email VARCHAR(100), "
                     + "username VARCHAR (50), password VARCHAR (50))");
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("******************************************");
         System.out.println("Tabla " + TABLE1 + " creada o actualizada.");
@@ -82,14 +82,14 @@ public class ConexionBD {
                 + "', '" + password + "')";
         //System.out.println(sql);
 
-        try (Statement st = conection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
             st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             System.out.println("Datos añadidos a la tabla.");
             try (ResultSet rs = st.getGeneratedKeys()) {
                 rs.next();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -103,18 +103,18 @@ public class ConexionBD {
         //System.out.println(sql);
 
         try {
-            conection = (Connection) DriverManager.getConnection(URL + BD, USER, PASSWORD);
+            connection = (Connection) DriverManager.getConnection(URL + BD, USER, PASSWORD);
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("********************************************************");
             System.out.println("RECUERDE QUE HA DE ESTAR REGISTRADO PARA PODER LOGUEARSE");
             System.out.println("********************************************************");
         }
 
         try {
-            st = conection.createStatement();
+            st = connection.createStatement();
             try (ResultSet rs = st.executeQuery(sql)) {
-                int resultados = 0;
+                int results = 0;
 
                 while (rs.next()) {
 
@@ -122,24 +122,24 @@ public class ConexionBD {
                     String pass = rs.getString("password");
 
                     user = new User(name, pass);
-                    resultados++;
+                    results++;
                 }
-                if (resultados == 0) {
+                if (results == 0) {
                     System.out.println("*******************************************************************");
                     System.out.println("No se ha encontrado ningun resultado.USTED NO DEBE ESTAR REGISTRADO");
                     System.out.println("*******************************************************************");
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (st != null) {
                 try {
                     st.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
