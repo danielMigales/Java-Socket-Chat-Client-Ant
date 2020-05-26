@@ -25,7 +25,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Cryptography;
-import model.User;
 
 /**
  * FXML Controller class
@@ -35,8 +34,7 @@ import model.User;
  */
 public class ChatController implements Initializable {
 
-    //variables para la conexion
-    private final String SERVER_IP = "192.168.1.49"; //cambiar esta variable segun la ip del servidor
+    private String SERVER_IP;
     private final int SERVER_PORT = 40000;
     private final int CLIENT_PORT = 50000;
 
@@ -75,6 +73,12 @@ public class ChatController implements Initializable {
     private Button buttonLogOutChat;
 
     @FXML
+    private TextField textFieldIP_Server;
+
+    @FXML
+    private TextField textFieldIPdestino;
+
+    @FXML
     void initialize() {
         assert AnchorPaneChat != null : "fx:id=\"AnchorPaneChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert buttonSendChat != null : "fx:id=\"buttonSendChat\" was not injected: check your FXML file 'Chat.fxml'.";
@@ -84,6 +88,8 @@ public class ChatController implements Initializable {
         assert textFieldWriteArea != null : "fx:id=\"textFieldWriteArea\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textAreaHostNameChat != null : "fx:id=\"textAreaHostNameChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert buttonLogOutChat != null : "fx:id=\"buttonLogOutChat\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textFieldIP_Server != null : "fx:id=\"textFieldIP_Server\" was not injected: check your FXML file 'Chat.fxml'.";
+        assert textFieldIPdestino != null : "fx:id=\"textFieldIPdestino\" was not injected: check your FXML file 'Chat.fxml'.";
 
     }
 
@@ -94,7 +100,8 @@ public class ChatController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb
+    ) {
 
         //Al iniciar la escena se realiza lo siguiente:
         getUserIP();
@@ -116,6 +123,7 @@ public class ChatController implements Initializable {
         var userName = textFieldChatUsername.getText();
         var IPAddress = textFieldChatIPAddress.getText();
         var message = textFieldWriteArea.getText();
+        var destinatario = textFieldIPdestino.getText();
 
         //encriptar mensaje
         Cryptography encryption = new Cryptography();
@@ -128,10 +136,12 @@ public class ChatController implements Initializable {
         System.out.println("El mensaje ha sido encriptado antes del envio: " + cryptoMessage);
 
         //se envia encriptado
-        DataPaquete outputData = new DataPaquete(userName, IPAddress, cryptoMessage);
+        DataPaquete outputData = new DataPaquete(userName, IPAddress, cryptoMessage, destinatario );
         //System.out.println(mensaje);
 
         try {
+
+            SERVER_IP = textFieldIP_Server.getText();
 
             //flujo de informacion y se asocia al socket
             try ( //crear el socket (conector con el servidor)
@@ -157,8 +167,6 @@ public class ChatController implements Initializable {
 
         //obtener los datos para colocarlos en el las casillas del chat (datos usuario)
         try {
-            User user;
-            //obtener el nombre de usuario
 
             //obtener direccion IP y el nombre de host y colocarlos
             InetAddress address = InetAddress.getLocalHost();

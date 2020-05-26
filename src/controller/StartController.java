@@ -11,12 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -98,15 +96,6 @@ public class StartController implements Initializable {
     private Label labelRegisterOK;
 
     @FXML
-    private Tab tabAyuda;
-
-    @FXML
-    private TextArea textAreaHelpStart;
-
-    @FXML
-    private ChoiceBox<?> ChoiBoxHelpStart;
-
-    @FXML
     private ImageView imageViewLogo;
 
     @FXML
@@ -128,10 +117,8 @@ public class StartController implements Initializable {
         assert imageviewIconUserRegister != null : "fx:id=\"imageviewIconUserRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageviewIconPasswordRegister != null : "fx:id=\"imageviewIconPasswordRegister\" was not injected: check your FXML file 'Start.fxml'.";
         assert labelRegisterOK != null : "fx:id=\"labelRegisterOK\" was not injected: check your FXML file 'Start.fxml'.";
-        assert tabAyuda != null : "fx:id=\"tabAyuda\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textAreaHelpStart != null : "fx:id=\"textAreaHelpStart\" was not injected: check your FXML file 'Start.fxml'.";
-        assert ChoiBoxHelpStart != null : "fx:id=\"ChoiBoxHelpStart\" was not injected: check your FXML file 'Start.fxml'.";
         assert imageViewLogo != null : "fx:id=\"imageViewLogo\" was not injected: check your FXML file 'Start.fxml'.";
+
     }
 
     @Override
