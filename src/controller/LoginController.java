@@ -30,13 +30,13 @@ import model.User;
  * @author daniel migales puertas
  *
  */
-public class StartController implements Initializable {
+public class LoginController implements Initializable {
 
     //variables para el movimiento del raton
     double xOffset = 0;
     double yOffset = 0;
 
-    StartController controller;
+    LoginController controller;
 
     @FXML
     private ResourceBundle resources;
@@ -100,24 +100,24 @@ public class StartController implements Initializable {
 
     @FXML
     void initialize() {
-        assert tabPaneLoginRegister != null : "fx:id=\"tabPaneLoginRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert tabLogin != null : "fx:id=\"tabLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert buttonLogin != null : "fx:id=\"buttonLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textAreaUsernameLogin != null : "fx:id=\"textAreaUsernameLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textFieldPasswordLogin != null : "fx:id=\"textFieldPasswordLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageviewIconUserLogin != null : "fx:id=\"imageviewIconUserLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageviewIconPasswordLogin != null : "fx:id=\"imageviewIconPasswordLogin\" was not injected: check your FXML file 'Start.fxml'.";
-        assert labelLoginOk != null : "fx:id=\"labelLoginOk\" was not injected: check your FXML file 'Start.fxml'.";
-        assert tabRegister != null : "fx:id=\"tabRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert buttonRegister != null : "fx:id=\"buttonRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textAreaEmailRegister != null : "fx:id=\"textAreaEmailRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textAreaUsernameRegister != null : "fx:id=\"textAreaUsernameRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert textAreaPasswordRegister != null : "fx:id=\"textAreaPasswordRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageviewIconEmailRegister != null : "fx:id=\"imageviewIconEmailRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageviewIconUserRegister != null : "fx:id=\"imageviewIconUserRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageviewIconPasswordRegister != null : "fx:id=\"imageviewIconPasswordRegister\" was not injected: check your FXML file 'Start.fxml'.";
-        assert labelRegisterOK != null : "fx:id=\"labelRegisterOK\" was not injected: check your FXML file 'Start.fxml'.";
-        assert imageViewLogo != null : "fx:id=\"imageViewLogo\" was not injected: check your FXML file 'Start.fxml'.";
+        assert tabPaneLoginRegister != null : "fx:id=\"tabPaneLoginRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert tabLogin != null : "fx:id=\"tabLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert buttonLogin != null : "fx:id=\"buttonLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert textAreaUsernameLogin != null : "fx:id=\"textAreaUsernameLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert textFieldPasswordLogin != null : "fx:id=\"textFieldPasswordLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageviewIconUserLogin != null : "fx:id=\"imageviewIconUserLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageviewIconPasswordLogin != null : "fx:id=\"imageviewIconPasswordLogin\" was not injected: check your FXML file 'Login.fxml'.";
+        assert labelLoginOk != null : "fx:id=\"labelLoginOk\" was not injected: check your FXML file 'Login.fxml'.";
+        assert tabRegister != null : "fx:id=\"tabRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert buttonRegister != null : "fx:id=\"buttonRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert textAreaEmailRegister != null : "fx:id=\"textAreaEmailRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert textAreaUsernameRegister != null : "fx:id=\"textAreaUsernameRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert textAreaPasswordRegister != null : "fx:id=\"textAreaPasswordRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageviewIconEmailRegister != null : "fx:id=\"imageviewIconEmailRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageviewIconUserRegister != null : "fx:id=\"imageviewIconUserRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageviewIconPasswordRegister != null : "fx:id=\"imageviewIconPasswordRegister\" was not injected: check your FXML file 'Login.fxml'.";
+        assert labelRegisterOK != null : "fx:id=\"labelRegisterOK\" was not injected: check your FXML file 'Login.fxml'.";
+        assert imageViewLogo != null : "fx:id=\"imageViewLogo\" was not injected: check your FXML file 'Login.fxml'.";
 
     }
 
@@ -191,7 +191,7 @@ public class StartController implements Initializable {
         Scene scene = new Scene(root);
         secondStage.setScene(scene);
         //se añaden los parametros de aspecto a la nueva ventana
-        secondStage.initStyle(StageStyle.DECORATED); //aparece el boton minimizar y cerrar en el marco
+        
         secondStage.setTitle("Java Socket Chat");
         //secondStage.setAlwaysOnTop(true); //siempre encima
         secondStage.setResizable(false); //no modificable de tamaño

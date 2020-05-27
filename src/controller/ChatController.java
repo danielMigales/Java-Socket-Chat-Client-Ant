@@ -39,7 +39,7 @@ public class ChatController implements Initializable {
     private final int CLIENT_PORT = 50000;
 
     //instancia del controlador de la primera pantalla (para obtener el username desde alli)
-    StartController controller2;
+    LoginController controller2;
 
     //variables de Scenebuilder
     @FXML
@@ -102,11 +102,11 @@ public class ChatController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         //Al iniciar la escena se realiza lo siguiente:
-        getUserIP();
+        getUserInfo();
         socketThread();
     }
 
-    public void getParams(StartController controller, String username) {
+    public void getParams(LoginController controller, String username) {
 
         textFieldChatUsername.setText(username);
         controller2 = controller;
@@ -149,7 +149,7 @@ public class ChatController implements Initializable {
             }
 
             //el mensaje sin encriptar se muestra en el area de chat
-            //textAreaWatchMessages.appendText(message + "\n");
+            textAreaWatchMessages.appendText(message + "\n");
             //se limpia el area de envio de mensajes
             textFieldWriteArea.clear();
 
@@ -160,7 +160,7 @@ public class ChatController implements Initializable {
 
     }
 
-    public void getUserIP() {
+    public void getUserInfo() {
 
         //obtener los datos para colocarlos en el las casillas del chat (datos usuario)
         try {
@@ -215,7 +215,6 @@ public class ChatController implements Initializable {
                         var message = inputData.getMensaje();
 
                         Cryptography decryption = new Cryptography();
-
                         String messageDecrypted = decryption.decrypt(message);
 
                         var concatenatedMessage = userName + "/" + ipAddress + " dice:\t\t" + messageDecrypted + "\n";
@@ -249,7 +248,7 @@ public class ChatController implements Initializable {
         stage.close();
 
         stage = new Stage();
-        AnchorPane root = FXMLLoader.load(getClass().getResource("/view/Start.fxml"));
+        AnchorPane root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
