@@ -149,7 +149,7 @@ public class ChatController implements Initializable {
             }
 
             //el mensaje sin encriptar se muestra en el area de chat
-            textAreaWatchMessages.appendText(message + "\n");
+            //textAreaWatchMessages.appendText(message + "\n");
             //se limpia el area de envio de mensajes
             textFieldWriteArea.clear();
 
@@ -218,7 +218,7 @@ public class ChatController implements Initializable {
 
                         String messageDecrypted = decryption.decrypt(message);
 
-                        var concatenatedMessage = userName + "/" + ipAddress + " dice:\t" + messageDecrypted + "\n";
+                        var concatenatedMessage = userName + "/" + ipAddress + " dice:\t\t" + messageDecrypted + "\n";
                         System.out.println(concatenatedMessage);
 
                         //visualizar los datos en la interfaz

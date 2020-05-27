@@ -33,20 +33,8 @@ and open the template in the editor.
 .label {
     -fx-font-size: 12pt;
     -fx-font-family: "System";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 
-}
-
-.labelExit{
-    -fx-font-size: 10pt;
-    -fx-font-family: "System";
-    -fx-text-fill: white;
-}
-
-.labelSendChat{
-    -fx-font-size: 10pt;
-    -fx-font-family: "System";
-    -fx-text-fill: white;
 }
 
 .button:hover {

@@ -7,22 +7,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane id="AnchorPaneChat" fx:id="AnchorPaneChat" prefHeight="550.0" prefWidth="605.0" styleClass="stageChat" stylesheets="@../css/chatStyleCss.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+<AnchorPane id="AnchorPaneChat" fx:id="AnchorPaneChat" prefHeight="639.0" prefWidth="606.0" styleClass="stageChat" stylesheets="@../css/chatStyleCss.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
     <children>
-        <Button id="buttonSendchat" fx:id="buttonSendChat" alignment="BOTTOM_CENTER" contentDisplay="RIGHT" layoutX="491.0" layoutY="469.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="60.0" prefWidth="80.0" styleClass="sendButton" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
+        <Button id="buttonSendchat" fx:id="buttonSendChat" alignment="BOTTOM_CENTER" contentDisplay="RIGHT" layoutX="491.0" layoutY="547.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="60.0" prefWidth="80.0" styleClass="sendButton" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
         <Label layoutX="52.0" layoutY="106.0" text="Usuario" />
         <Label layoutX="53.0" layoutY="257.0" text="Direccion IP" />
-        <TextArea fx:id="textAreaWatchMessages" editable="false" layoutX="268.0" layoutY="91.0" prefHeight="358.0" prefWidth="307.0" wrapText="true" />
+        <TextArea fx:id="textAreaWatchMessages" editable="false" layoutX="268.0" layoutY="91.0" prefHeight="427.0" prefWidth="307.0" wrapText="true" />
         <TextField fx:id="textFieldChatUsername" editable="false" layoutX="52.0" layoutY="134.0" prefHeight="30.0" prefWidth="170.0" promptText="Nombre de usuario" />
         <TextField fx:id="textFieldChatIPAddress" editable="false" layoutX="50.0" layoutY="293.0" prefHeight="30.0" prefWidth="170.0" promptText="Direccion IP" />
-        <TextField fx:id="textFieldWriteArea" layoutX="34.0" layoutY="479.0" prefHeight="40.0" prefWidth="430.0" promptText="Empiece a escribir..." style="-fx-background-radius: 10;" />
+        <TextField fx:id="textFieldWriteArea" layoutX="34.0" layoutY="557.0" prefHeight="40.0" prefWidth="430.0" promptText="Empiece a escribir..." style="-fx-background-radius: 10;" />
         <Label layoutX="52.0" layoutY="177.0" prefHeight="30.0" prefWidth="165.0" text="Nombre de Host" wrapText="true" />
         <TextField fx:id="textAreaHostNameChat" editable="false" layoutX="51.0" layoutY="213.0" prefHeight="30.0" prefWidth="165.0" promptText="Nombre de la maquina" />
         <Button fx:id="buttonLogOutChat" layoutX="517.0" layoutY="20.0" mnemonicParsing="false" onAction="#logOut" prefHeight="60.0" prefWidth="70.0" styleClass="logOutButton" />
       <Label layoutX="34.0" layoutY="39.0" text="IP del servidor" />
       <TextField fx:id="textFieldIP_Server" layoutX="157.0" layoutY="39.0" prefHeight="30.0" prefWidth="170.0" promptText="Direccion IP del servidor " />
-      <TextField fx:id="textFieldIPdestino" layoutX="34.0" layoutY="417.0" prefHeight="30.0" prefWidth="170.0" promptText="Direccion IP del destinatario" />
-      <Label layoutX="34.0" layoutY="384.0" text="Direccion IP del destinatario" />
+      <TextField fx:id="textFieldIPdestino" layoutX="34.0" layoutY="465.0" prefHeight="30.0" prefWidth="170.0" promptText="Direccion IP del destinatario" />
+      <Label layoutX="34.0" layoutY="432.0" text="Direccion IP del destinatario" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="256.0" layoutX="30.0" layoutY="94.0" stroke="#faf9fa" strokeLineCap="ROUND" strokeType="OUTSIDE" strokeWidth="4.0" width="217.0" />
     </children>
 </AnchorPane>

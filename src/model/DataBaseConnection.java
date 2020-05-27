@@ -44,7 +44,7 @@ public class DataBaseConnection {
     //funcion de desconectar de la bd
     public void disconnect() {
         connection = null;
-    }
+    }  
 
     //registro de usuarios
     public void register(String email, String username, String password) {
