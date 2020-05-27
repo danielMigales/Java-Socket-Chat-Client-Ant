@@ -90,7 +90,6 @@ public class ChatController implements Initializable {
         assert buttonLogOutChat != null : "fx:id=\"buttonLogOutChat\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldIP_Server != null : "fx:id=\"textFieldIP_Server\" was not injected: check your FXML file 'Chat.fxml'.";
         assert textFieldIPdestino != null : "fx:id=\"textFieldIPdestino\" was not injected: check your FXML file 'Chat.fxml'.";
-
     }
 
     /**
@@ -100,13 +99,11 @@ public class ChatController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb
-    ) {
+    public void initialize(URL url, ResourceBundle rb) {
 
         //Al iniciar la escena se realiza lo siguiente:
         getUserIP();
         socketThread();
-
     }
 
     public void getParams(StartController controller, String username) {
@@ -136,7 +133,7 @@ public class ChatController implements Initializable {
         System.out.println("El mensaje ha sido encriptado antes del envio: " + cryptoMessage);
 
         //se envia encriptado
-        DataPaquete outputData = new DataPaquete(userName, IPAddress, cryptoMessage, destinatario );
+        DataPaquete outputData = new DataPaquete(userName, IPAddress, cryptoMessage, destinatario);
         //System.out.println(mensaje);
 
         try {
@@ -168,12 +165,23 @@ public class ChatController implements Initializable {
         //obtener los datos para colocarlos en el las casillas del chat (datos usuario)
         try {
 
-            //obtener direccion IP y el nombre de host y colocarlos
+            //obtener direccion IP y el nombre de host
             InetAddress address = InetAddress.getLocalHost();
-            String hostName = address.getHostName();
+            String hostName = address.getHostName(); //nombre de la maquina
+            byte[] IPAddress = address.getAddress(); //direccion ip
+            String sIPAddress = "";
+
+            for (int x = 0; x < IPAddress.length; x++) {
+                if (x > 0) {
+                    sIPAddress += ".";
+                }
+                sIPAddress += IPAddress[x] & 255;
+            }
+            String localIpAddress = address.getHostAddress(); //direccion ip localhost
+
+            //colocarlos en los textfield
             textAreaHostNameChat.setText(hostName);
-            String localIpAddress = address.getHostAddress();
-            textFieldChatIPAddress.setText(localIpAddress);
+            textFieldChatIPAddress.setText(sIPAddress);
 
         } catch (UnknownHostException ex) {
             Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,7 +213,12 @@ public class ChatController implements Initializable {
                         var userName = inputData.getNombreUsuario();
                         var ipAddress = inputData.getDireccionIP();
                         var message = inputData.getMensaje();
-                        var concatenatedMessage = userName + "/" + ipAddress + " dice:\t" + message + "\n";
+
+                        Cryptography decryption = new Cryptography();
+
+                        String messageDecrypted = decryption.decrypt(message);
+
+                        var concatenatedMessage = userName + "/" + ipAddress + " dice:\t" + messageDecrypted + "\n";
                         System.out.println(concatenatedMessage);
 
                         //visualizar los datos en la interfaz
@@ -219,6 +232,8 @@ public class ChatController implements Initializable {
                             + " en la aplicacion cliente");
                     System.out.println("No se ha encontrado la clase DataPaquete");
                     System.out.println(ex.getMessage());
+                } catch (Exception ex) {
+                    Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };

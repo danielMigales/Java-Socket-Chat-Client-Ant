@@ -191,9 +191,9 @@ public class StartController implements Initializable {
         Scene scene = new Scene(root);
         secondStage.setScene(scene);
         //se añaden los parametros de aspecto a la nueva ventana
-        secondStage.initStyle(StageStyle.UTILITY); //aparece el boton minimizar y cerrar en el marco
+        secondStage.initStyle(StageStyle.DECORATED); //aparece el boton minimizar y cerrar en el marco
         secondStage.setTitle("Java Socket Chat");
-        secondStage.setAlwaysOnTop(true); //siempre encima
+        //secondStage.setAlwaysOnTop(true); //siempre encima
         secondStage.setResizable(false); //no modificable de tamaño
         secondStage.initModality(Modality.APPLICATION_MODAL);
         secondStage.show();

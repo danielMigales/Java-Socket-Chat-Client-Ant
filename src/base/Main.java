@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -25,8 +24,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Start.fxml"));
         primaryStage.setTitle("Inicio de sesion / Registro");
         primaryStage.setScene(new Scene(root));
-               
-        primaryStage.setAlwaysOnTop(true); //siempre encima
+
+        //primaryStage.setAlwaysOnTop(true); //siempre encima
         primaryStage.setResizable(true); //no modificable de tamaño
         primaryStage.show(); //mostrar la ventana
 
